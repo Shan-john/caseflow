@@ -1,12 +1,16 @@
 import 'dart:developer';
 
+import 'package:caseflow/model/Usermodel.dart';
 import 'package:caseflow/model/cardModel.dart';
 import 'package:caseflow/service/http.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Firebaseservice {
   static Firebaseservice instance = Firebaseservice();
+  
+  get firebaseFirestore => null;
 
   Future<void> uploadCaseDetails(
     String caseName,
@@ -62,5 +66,17 @@ class Firebaseservice {
         }).toList();
 
     return cases;
+  }
+   Future<UserModel> getUserinformation() async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> QuerySnapshot =
+          await firebaseFirestore
+              .collection("User")
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .get();
+      return UserModel.fromJson(QuerySnapshot.data()!);
+    } catch (e) {
+      return UserModel(email: "", name: "", id: "", password: "", userType: "");
+    }
   }
 }

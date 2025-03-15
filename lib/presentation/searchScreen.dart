@@ -253,8 +253,10 @@
 //   }
 // }
 
+import 'package:caseflow/core/routes.dart';
 import 'package:caseflow/model/cardModel.dart';
 import 'package:caseflow/presentation/casedetailScreen.dart';
+import 'package:caseflow/presentation/chatRoom.dart';
 import 'package:caseflow/service/firebaseservice.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -346,7 +348,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               'Search by case name, respondents, judge...',
                           hintStyle: TextStyle(
                             color: Colors.grey[400],
-                            fontSize: 12,
+                            fontSize: 16 ,
                           ),
                           border: InputBorder.none,
                           contentPadding: const EdgeInsets.symmetric(
@@ -376,7 +378,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       decoration: const BoxDecoration(
                         color: Color(0xFFFCE4EC),
                         image: DecorationImage(
-                          image: AssetImage('assets/image/SupremeCourt.png'),
+                          image: AssetImage('assets/image/SupremeCourt-red.png'),
                           fit: BoxFit.cover,
                           opacity: 0.1,
                         ),
@@ -415,25 +417,33 @@ class _SearchScreenState extends State<SearchScreen> {
                   Positioned(
                     right: 16,
                     bottom: 16,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 10,
-                            offset: const Offset(0, 5),
+                    child: InkWell(
+                      onTap: (){
+                         Routes.instance.push(
+                            widget: ChatScreen(),
+                            context: context,
+                          ); 
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        child: const CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 30,
+                          child: Icon(
+                            Icons.balance,
+                            color: Color(0xFFB22222),
+                            size: 30,
                           ),
-                        ],
-                      ),
-                      child: const CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 30,
-                        child: Icon(
-                          Icons.balance,
-                          color: Color(0xFFB22222),
-                          size: 30,
                         ),
                       ),
                     ),

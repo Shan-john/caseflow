@@ -1,7 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:caseflow/firebase_options.dart';
+import 'package:caseflow/presentation/auth/splashScreen.dart';
 import 'package:caseflow/presentation/home.dart';
+import 'package:caseflow/service/provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 import 'package:pdfx/pdfx.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +19,14 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
 );
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -57,7 +67,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home:  HomeScreen(),
+      home:  SplashScreen(),
     );
   }
 }

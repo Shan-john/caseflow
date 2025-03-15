@@ -1,8 +1,12 @@
+import 'package:caseflow/core/routes.dart';
+import 'package:caseflow/presentation/auth/function/verification.dart';
 import 'package:caseflow/presentation/auth/login.dart';
+import 'package:caseflow/presentation/auth/splashScreen.dart';
 import 'package:caseflow/presentation/home.dart';
+import 'package:caseflow/presentation/widget/showText.dart';
+import 'package:caseflow/service/firebase_auth_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
- 
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -18,7 +22,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final _formKey = GlobalKey<FormState>();
- 
+
   bool _isLoading = false;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
@@ -194,101 +198,101 @@ class _SignUpPageState extends State<SignUpPage> {
                   const SizedBox(height: 20),
 
                   // Confirm Password Field
-                  TextFormField(
-                    controller: _confirmPasswordController,
-                    obscureText: _obscureConfirmPassword,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      labelText: "Confirm Password",
-                      labelStyle: const TextStyle(color: Colors.grey),
-                      prefixIcon: const Icon(
-                        Icons.lock_outline,
-                        color: Colors.grey,
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscureConfirmPassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: Colors.grey,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscureConfirmPassword = !_obscureConfirmPassword;
-                          });
-                        },
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Colors.white),
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey.withOpacity(0.1),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please confirm your password';
-                      }
-                      if (value != _passwordController.text) {
-                        return 'Passwords do not match';
-                      }
-                      return null;
-                    },
-                  ),
+                  // TextFormField(
+                  //   controller: _confirmPasswordController,
+                  //   obscureText: _obscureConfirmPassword,
+                  //   style: const TextStyle(color: Colors.white),
+                  //   decoration: InputDecoration(
+                  //     labelText: "Confirm Password",
+                  //     labelStyle: const TextStyle(color: Colors.grey),
+                  //     prefixIcon: const Icon(
+                  //       Icons.lock_outline,
+                  //       color: Colors.grey,
+                  //     ),
+                  //     suffixIcon: IconButton(
+                  //       icon: Icon(
+                  //         _obscureConfirmPassword
+                  //             ? Icons.visibility_off
+                  //             : Icons.visibility,
+                  //         color: Colors.grey,
+                  //       ),
+                  //       onPressed: () {
+                  //         setState(() {
+                  //           _obscureConfirmPassword = !_obscureConfirmPassword;
+                  //         });
+                  //       },
+                  //     ),
+                  //     enabledBorder: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(12),
+                  //       borderSide: const BorderSide(color: Colors.grey),
+                  //     ),
+                  //     focusedBorder: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(12),
+                  //       borderSide: const BorderSide(color: Colors.white),
+                  //     ),
+                  //     filled: true,
+                  //     fillColor: Colors.grey.withOpacity(0.1),
+                  //   ),
+                  //   validator: (value) {
+                  //     if (value == null || value.isEmpty) {
+                  //       return 'Please confirm your password';
+                  //     }
+                  //     if (value != _passwordController.text) {
+                  //       return 'Passwords do not match';
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
                   const SizedBox(height: 20),
 
                   // Terms and Conditions
-                  Row(
-                    children: [
-                      SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: Checkbox(
-                          value: _acceptTerms,
-                          onChanged: (value) {
-                            setState(() {
-                              _acceptTerms = value ?? false;
-                            });
-                          },
-                          fillColor: MaterialStateProperty.resolveWith<Color>((
-                            Set<MaterialState> states,
-                          ) {
-                            if (states.contains(MaterialState.selected)) {
-                              return Colors.green;
-                            }
-                            return Colors.grey;
-                          }),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text.rich(
-                          TextSpan(
-                            text: 'I agree to the ',
-                            style: const TextStyle(color: Colors.grey),
-                            children: [
-                              TextSpan(
-                                text: 'Terms & Conditions',
-                                style: const TextStyle(
-                                  color: Colors.green,
-                                  decoration: TextDecoration.underline,
-                                ),
-                                recognizer:
-                                    TapGestureRecognizer()
-                                      ..onTap = () {
-                                        // Handle Terms & Conditions tap
-                                      },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   children: [
+                  //     SizedBox(
+                  //       height: 24,
+                  //       width: 24,
+                  //       child: Checkbox(
+                  //         value: _acceptTerms,
+                  //         onChanged: (value) {
+                  //           setState(() {
+                  //             _acceptTerms = value ?? false;
+                  //           });
+                  //         },
+                  //         fillColor: MaterialStateProperty.resolveWith<Color>((
+                  //           Set<MaterialState> states,
+                  //         ) {
+                  //           if (states.contains(MaterialState.selected)) {
+                  //             return Colors.green;
+                  //           }
+                  //           return Colors.grey;
+                  //         }),
+                  //       ),
+                  //     ),
+                  //     const SizedBox(width: 8),
+                  //     // Expanded(
+                  //     //   child: Text.rich(
+                  //     //     TextSpan(
+                  //     //       text: 'I agree to the ',
+                  //     //       style: const TextStyle(color: Colors.grey),
+                  //     //       children: [
+                  //     //         TextSpan(
+                  //     //           text: 'Terms & Conditions',
+                  //     //           style: const TextStyle(
+                  //     //             color: Colors.green,
+                  //     //             decoration: TextDecoration.underline,
+                  //     //           ),
+                  //     //           recognizer:
+                  //     //               TapGestureRecognizer()
+                  //     //                 ..onTap = () {
+                  //     //                   // Handle Terms & Conditions tap
+                  //     //                 },
+                  //     //         ),
+                  //     //       ],
+                  //     //     ),
+                  //     //   ),
+                  //     // ),
+                  //   ],
+                  // ),
                   const SizedBox(height: 24),
 
                   // Sign Up Button
@@ -297,7 +301,26 @@ class _SignUpPageState extends State<SignUpPage> {
                     height: 50,
                     child: ElevatedButton(
                       onPressed:
-                          _isLoading || !_acceptTerms ? null : _handleSignUp,
+                          () async {
+bool validation = false;
+                  validation = signUpAuthvalidation(
+                      _emailController.text,
+                      _passwordController.text,
+                      _nameController.text,
+                      );
+                  if (validation) {
+                    bool isSignuped = await FirebaseAuth_Helper.instance.SignUp(
+                        _emailController.text,
+                        _passwordController.text,
+                        _nameController.text
+                       );
+                    isSignuped == true
+                        ? Routes.instance.pushandRemoveUntil(
+                            widget: SplashScreen(),
+                            context: context,
+                          )
+                        : showMessage("failed");
+                          }},
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         shape: RoundedRectangleBorder(
@@ -366,48 +389,13 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> _handleSignUp() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    if (!_acceptTerms) {
-      setState(() {
-        _errorMessage = 'Please accept the Terms & Conditions';
-      });
-      return;
+    @override
+    void dispose() {
+      _nameController.dispose();
+      _emailController.dispose();
+      _passwordController.dispose();
+      _confirmPasswordController.dispose();
+      super.dispose();
     }
-
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
-
-    try {
-      // TODO: Implement actual sign up logic
-      await Future.delayed(
-        const Duration(seconds: 2),
-      ); // Simulate network request
-
-      // Navigate to home page on success
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
-    } catch (e) {
-      setState(() {
-        _errorMessage = 'Failed to create account. Please try again.';
-      });
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
   }
 }

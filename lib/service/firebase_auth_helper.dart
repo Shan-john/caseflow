@@ -3,6 +3,7 @@ import 'package:caseflow/model/Usermodel.dart';
 import 'package:caseflow/presentation/widget/showText.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
  
  
 class FirebaseAuth_Helper {
@@ -12,9 +13,8 @@ class FirebaseAuth_Helper {
   Stream<User?> get getAuthChange => _auth.authStateChanges();
 
   Future<bool> SignUp(String email, String password, String username,
-      String heightString, String weightString) async {
-    double height = double.parse(heightString);
-    double weight = double.parse(weightString);
+       ) async {
+   
     try {
       showMessage("SigningUP..");
       UserCredential? userCredential = await _auth
@@ -60,6 +60,7 @@ class FirebaseAuth_Helper {
     try {
       showMessage("logout");
       await _auth.signOut();
+     
       return true;
     } catch (e) {
       showMessage("failed to Sign Out");

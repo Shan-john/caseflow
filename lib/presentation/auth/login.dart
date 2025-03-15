@@ -1,6 +1,13 @@
+import 'dart:developer';
+
+import 'package:caseflow/model/Usermodel.dart';
+import 'package:caseflow/presentation/auth/function/verification.dart';
 import 'package:caseflow/presentation/auth/signUP.dart';
+import 'package:caseflow/presentation/auth/splashScreen.dart';
+import 'package:caseflow/presentation/home.dart';
+import 'package:caseflow/service/firebase_auth_helper.dart';
+import 'package:caseflow/service/firebaseservice.dart';
 import 'package:flutter/material.dart';
- 
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -13,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
+  UserModel? userModel;
   bool _rememberMe = false;
   bool _isLoading = false;
   bool _obscurePassword = true;
@@ -189,12 +196,31 @@ class _LoginPageState extends State<LoginPage> {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => HomePage()),
-                         
+                      onPressed: () async {
+                        bool validation = false;
+                        bool login = false;
+                        validation = loginAuthvalidation(
+                          _emailController.text,
+                          _passwordController.text,
+                        );
+                        if (validation) {
+                          login = await FirebaseAuth_Helper.instance.Login(
+                            _emailController.text,
+                            _passwordController.text,
+                          );
+                        }
+                        if (login == true) {
+                          
+                         // Future.delayed(Duration(seconds: 3), () {});
+                          Navigator.of(context).pushAndRemoveUntil( 
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return SplashScreen();
+                              },
+                            ),
+                            (route) => false,
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
@@ -321,5 +347,13 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future<void> getUserdata() async {
+    try {
+      userModel = await Firebaseservice.instance.getUserinformation();
+    } catch (e) {
+      log(e.toString());
+    }
   }
 }

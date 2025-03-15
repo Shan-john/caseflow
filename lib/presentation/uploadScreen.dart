@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:caseflow/core/routes.dart';
+import 'package:caseflow/presentation/chatRoom.dart';
 import 'package:caseflow/service/firebaseservice.dart';
 import 'package:caseflow/service/http.dart';
 import 'package:file_picker/file_picker.dart';
@@ -67,10 +69,6 @@ class _UploadScreenState extends State<UploadScreen> {
                             letterSpacing: 2,
                           ),
                         ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.search, color: Colors.white),
-                        onPressed: () {},
                       ),
                     ],
                   ),
@@ -150,22 +148,34 @@ class _UploadScreenState extends State<UploadScreen> {
           Positioned(
             right: 16,
             bottom: 16,
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
+            child: InkWell(
+              onTap: () {
+                 Routes.instance.push(
+                            widget: ChatScreen(),
+                            context: context,
+                          ); 
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: const CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 30,
+                  child: Icon(
+                    Icons.balance,
+                    color: Color(0xFFB22222),
+                    size: 30,
                   ),
-                ],
-              ),
-              child: const CircleAvatar(
-                backgroundColor: Colors.white,
-                radius: 30,
-                child: Icon(Icons.balance, color: Color(0xFFB22222), size: 30),
+                ),
               ),
             ),
           ),
@@ -268,8 +278,8 @@ class _UploadScreenState extends State<UploadScreen> {
   }
 
   Future<void> getRecognisedText(File image) async {
-    log("hello upload"); 
-    String imagebase64  = await  convertImageToBase64(image);
+    log("hello upload");
+    String imagebase64 = await convertImageToBase64(image);
     try {
       String formatedtext = await generateFormattedAIResponse(scannedText);
       final inputImage = InputImage.fromFile(image);
@@ -295,7 +305,7 @@ class _UploadScreenState extends State<UploadScreen> {
 
       // 🔥 Upload Extracted Data to Firestore
       log("firebase upload");
-   
+
       final data = await generateKeyWords(
         formatedtext,
         extractedText,
@@ -324,4 +334,3 @@ Future<String> convertImageToBase64(File image) async {
     return ''; // Return an empty string if an error occurs
   }
 }
-
