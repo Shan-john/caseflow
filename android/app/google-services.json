@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "657292155546",
+    "project_id": "caseflow-5ac9d",
+    "storage_bucket": "caseflow-5ac9d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:657292155546:android:8d78b5ef4a9ae8248d5d23",
+        "android_client_info": {
+          "package_name": "com.example.caseflow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1Xi7eSOr7Pg_WZU1WUOnIZPRTUWe_o1M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
