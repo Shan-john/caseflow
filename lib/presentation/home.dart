@@ -1,3 +1,4 @@
+import 'package:caseflow/presentation/searchScreen.dart';
 import 'package:caseflow/presentation/uploadScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -56,21 +57,34 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'search by case, respondents, judge........',
-                      hintStyle: TextStyle(
-                        color: Colors.grey[400],
-                        fontSize: 16,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen()));
+                    },
+                    child: Container(
+                      padding:  
+                         EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 16,
+                        ),
+                      child:  Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text("'search by case, respondents, judge........",style: TextStyle(
+                              color: Colors.grey[400],
+                              fontSize: 16,
+                            ),),
+                             Icon(
+                          Icons.search,
+                          color: Colors.grey[400],
+                        ),
+                        ],
                       ),
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: Colors.grey[400],
-                      ),
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 16,
+                      decoration: BoxDecoration(
+                           
+                       
+                        
+                      
                       ),
                     ),
                   ),

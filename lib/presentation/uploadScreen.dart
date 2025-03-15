@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:caseflow/service/firebaseservice.dart';
@@ -81,30 +83,21 @@ class _UploadScreenState extends State<UploadScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        InkWell(
-                          onTap: ()async {
-                            pickPDFAndConvert();
-                            if (!isProcessing) {
-                           
-                              
-                            }
-                          },
-                          child: const Text(
-                            'Upload your Documents\nHere!',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 36,
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xFFB22222),
-                              height: 1.2,
-                            ),
+                        const Text(
+                          'Upload your Documents\nHere!',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 36,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFFB22222),
+                            height: 1.2,
                           ),
                         ),
                         const SizedBox(height: 40),
                         // Upload Box
                         InkWell(
                           onTap: () {
-                            // Handle file picker
+                            pickPDFAndConvert();
                           },
                           child: Container(
                             padding: const EdgeInsets.all(32),
@@ -273,82 +266,60 @@ class _UploadScreenState extends State<UploadScreen> {
     return path;
   }
 
- 
+  Future<void> getRecognisedText(File image) async {
+    log("hello upload"); 
+    String imagebase64  = await  convertImageToBase64(image);
+    try {
+      String formatedtext = await generateFormattedAIResponse(scannedText);
+      final inputImage = InputImage.fromFile(image);
+      final textRecognizer = TextRecognizer();
+      final RecognizedText recognisedText = await textRecognizer.processImage(
+        inputImage,
+      );
+      await textRecognizer.close();
 
-Future<void> getRecognisedText(File image) async {
-  try {
-     String formatedtext = await  generateFormattedAIResponse(scannedText);
-    final inputImage = InputImage.fromFile(image);
-    final textRecognizer = TextRecognizer();
-    final RecognizedText recognisedText = await textRecognizer.processImage(inputImage);
-    await textRecognizer.close();
-
-    String extractedText = "";
-    for (TextBlock block in recognisedText.blocks) {
-      for (TextLine line in block.lines) {
-        extractedText += line.text + "\n";
+      String extractedText = "";
+      for (TextBlock block in recognisedText.blocks) {
+        for (TextLine line in block.lines) {
+          extractedText += line.text + "\n";
+        }
       }
-    }
 
-    if (extractedText.isEmpty) {
+      if (extractedText.isEmpty) {
+        setState(() {
+          scannedText = "No text found.";
+        });
+        return;
+      }
+
+      // 🔥 Upload Extracted Data to Firestore
+      log("firebase upload");
+   
+      final data = await generateKeyWords(
+        formatedtext,
+        extractedText,
+        imagebase64
+      ); // Ensure this is awaited
+      log("firebase upload");
+
       setState(() {
-        scannedText = "No text found.";
+        scannedText = extractedText;
       });
-      return;
+    } catch (e) {
+      setState(() {
+        scannedText = "Error during text recognition: ${e.toString()}";
+      });
     }
-
-    // 🔥 Extract Key Case Details Using Regex
-    String caseName = RegExp(r'Case Name:\s*(.+)').firstMatch(extractedText)?.group(1) ?? "Unknown";
-    String caseDate = RegExp(r'Date:\s*(.+)').firstMatch(extractedText)?.group(1) ?? "Unknown";
-    String caseType = RegExp(r'Case Type:\s*(.+)').firstMatch(extractedText)?.group(1) ?? "Unknown";
-    String judgeNumber = RegExp(r'Judge Number:\s*(\d+)').firstMatch(extractedText)?.group(1) ?? "Unknown";
-
-    // 🔥 Upload Extracted Data to Firestore
-    await Firebaseservice.instance.uploadCaseDetails(caseName, caseDate, caseType, judgeNumber, formatedtext);
-
-    setState(() {
-      scannedText = extractedText;
-    });
-
-  } catch (e) {
-    setState(() {
-      scannedText = "Error during text recognition: ${e.toString()}";
-    });
   }
 }
 
-
-Future<void> processOCRAndUpload(List<File> imageFiles) async {
-  final textRecognizer = TextRecognizer();
-  String fullText = "";
-
-  for (File image in imageFiles) {
-    final inputImage = InputImage.fromFile(image);
-    final RecognizedText recognizedText = await textRecognizer.processImage(
-      inputImage,
-    );
-    fullText += recognizedText.text + "\n\n";
+Future<String> convertImageToBase64(File image) async {
+  try {
+    List<int> imageBytes = await image.readAsBytes(); // Read the file as bytes
+    return base64Encode(imageBytes); // Return the Base64 encoded string
+  } catch (e) {
+    print('Error while converting to Base64: $e');
+    return ''; // Return an empty string if an error occurs
   }
+}
 
-  textRecognizer.close();
-
-  // Extract details from the full text (Use regex or NLP for better extraction)
-  String caseName =
-      RegExp(r'Case Name: (.+)').firstMatch(fullText)?.group(1) ?? "Unknown";
-  String caseDate =
-      RegExp(r'Date: (.+)').firstMatch(fullText)?.group(1) ?? "Unknown";
-  String caseType =
-      RegExp(r'Case Type: (.+)').firstMatch(fullText)?.group(1) ?? "Unknown";
-  String judgeNumber =
-      RegExp(r'Judge Number: (\d+)').firstMatch(fullText)?.group(1) ??
-      "Unknown";
-
-  // Upload to Firestore
-  await Firebaseservice.instance.uploadCaseDetails(
-    caseName,
-    caseDate,
-    caseType,
-    judgeNumber,
-    fullText,
-  );
-}}

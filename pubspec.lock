@@ -272,14 +272,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  fuzzywuzzy:
+    dependency: "direct main"
+    description:
+      name: fuzzywuzzy
+      sha256: "3004379ffd6e7f476a0c2091f38f16588dc45f67de7adf7c41aa85dec06b432c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   gap:
     dependency: "direct main"
     description:
       name: gap
-      sha256: db02ec4ac4511ea8d324d7f671d526959a8e7857468b4ea64113fe8a82f16a2c
+      sha256: f19387d4e32f849394758b91377f9153a1b41d79513ef7668c088c77dbc6955d
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.2"
+    version: "3.0.1"
   google_ml_kit:
     dependency: "direct main"
     description:
@@ -670,7 +678,7 @@ packages:
     source: hosted
     version: "1.1.0"
   uuid:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: uuid
       sha256: a5be9ef6618a7ac1e964353ef476418026db906c4facdedaa299b7a2e71690ff
