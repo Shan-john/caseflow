@@ -1,56 +1,66 @@
+import 'dart:developer';
+
 import 'package:caseflow/model/cardModel.dart';
+import 'package:caseflow/service/http.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class Firebaseservice {
-  static Firebaseservice  instance = Firebaseservice();
- 
+  static Firebaseservice instance = Firebaseservice();
 
-Future<void> uploadCaseDetails(
-  String caseName, 
-  String caseDate, 
-  String caseType, 
-  String judgeNumber, 
-  String fullText, 
-  String id,
-  String base64image
-) async {
-  CollectionReference pdfCollection = FirebaseFirestore.instance.collection('pdf');
+  Future<void> uploadCaseDetails(
+    String caseName,
+    String caseDate,
+    String caseType,
+    String judgeNumber,
+    String fullText,
+    String id,
+    String base64image,
+    BuildContext context,
+  ) async {
+    
+    CollectionReference pdfCollection = FirebaseFirestore.instance.collection(
+      'pdf',
+    );
 
-  // Use the provided `id` instead of auto-generating one
-  DocumentReference caseRef = pdfCollection.doc(id);
+    // Use the provided `id` instead of auto-generating one
+    DocumentReference caseRef = pdfCollection.doc(id);
 
-  // Create or update the case document
-  await caseRef.set({
-    'case_name': caseName,
-    'case_date': caseDate,
-    'case_type': caseType,
-    'judge_number': judgeNumber,
-    'id': id, // Ensure the ID is stored as well
-    'timestamp': FieldValue.serverTimestamp(),
-  });
+    // Create or  update the case document
+    await caseRef.set({
+      'case_name': caseName,
+      'case_date': caseDate,
+      'case_type': caseType,
+      'judge_number': judgeNumber,
+      'id': id, // Ensure the ID is stored as well
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  
+    // Add full case text in the 'full_details' subcollection with the same `id`
+    await caseRef.collection('full_details').doc(id).set({
+      'text': fullText,
+      'image': base64image,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+    Navigator.of(context).pop();
+    print("Case details uploaded successfully with ID: $id");
+  }
 
-  // Add full case text in the 'full_details' subcollection with the same `id`
-  await caseRef.collection('full_details').doc(id).set({
-    'text': fullText,
-    'image': base64image,
-    'timestamp': FieldValue.serverTimestamp(),
-  });
+  Future<List<CaseModel>> fetchCaseDetails() async {
+    CollectionReference pdfCollection = FirebaseFirestore.instance.collection(
+      'pdf',
+    );
 
-  print("Case details uploaded successfully with ID: $id");
-}
+    QuerySnapshot querySnapshot = await pdfCollection.get();
 
+    List<CaseModel> cases =
+        querySnapshot.docs.map((doc) {
+          return CaseModel.fromFirestore(
+            doc.id,
+            doc.data() as Map<String, dynamic>,
+          );
+        }).toList();
 
-
-
-Future<List<CaseModel>> fetchCaseDetails() async {
-  CollectionReference pdfCollection = FirebaseFirestore.instance.collection('pdf');
-
-  QuerySnapshot querySnapshot = await pdfCollection.get();
-
-  List<CaseModel> cases = querySnapshot.docs.map((doc) {
-    return CaseModel.fromFirestore(doc.id, doc.data() as Map<String, dynamic>);
-  }).toList();
-
-  return cases;
-}
+    return cases;
+  }
 }

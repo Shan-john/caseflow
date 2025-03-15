@@ -69,11 +69,11 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        actions: [
-          InkWell(
+        actions:  [
+       isLoading == false?   InkWell(
             onTap: () => _showImageDialog(context, fullDetailsSnapshot['image']),
             child: Icon(Icons.format_align_center, color: Colors.white),
-          ),
+          ) :SizedBox(),
           Gap(20),
         ],
         leading: IconButton(
@@ -138,24 +138,20 @@ void _showImageDialog(BuildContext context, String base64String) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Image Preview",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      return SingleChildScrollView(
+        child: Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+               
+              base64ToImage(base64String),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("Close"),
               ),
-            ),
-            base64ToImage(base64String),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("Close"),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     },

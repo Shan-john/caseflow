@@ -1,0 +1,4 @@
+enum usertype {
+  normalUser,
+  adminUser,
+}

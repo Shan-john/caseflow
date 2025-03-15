@@ -98,6 +98,7 @@ class _UploadScreenState extends State<UploadScreen> {
                         InkWell(
                           onTap: () {
                             pickPDFAndConvert();
+                            showLoadingDialog(context);
                           },
                           child: Container(
                             padding: const EdgeInsets.all(32),
@@ -298,7 +299,8 @@ class _UploadScreenState extends State<UploadScreen> {
       final data = await generateKeyWords(
         formatedtext,
         extractedText,
-        imagebase64
+        imagebase64,
+        context,
       ); // Ensure this is awaited
       log("firebase upload");
 

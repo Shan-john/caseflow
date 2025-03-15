@@ -1,0 +1,52 @@
+import 'package:caseflow/presentation/auth/login.dart';
+import 'package:caseflow/presentation/home.dart';
+import 'package:caseflow/service/firebase_auth_helper.dart';
+import 'package:flutter/material.dart';
+
+import 'package:flutter/material.dart';
+
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+
+    Future.delayed(const Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StreamBuilder(
+              stream: FirebaseAuth_Helper.instance.getAuthChange,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return HomeScreen();
+                } //  return if the user is driver goto drivermain page() other wize mechanic homepage;
+                else {
+                  return const LoginPage();
+                }
+              },
+            ),
+          ));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+     backgroundColor: Color.fromARGB(255, 18, 18, 34),
+      body: Center(
+        child: Image(
+            image: AssetImage("assets/image/SupremeCourt-red.png"),  
+          ),
+      ), 
+    );
+  }
+}
