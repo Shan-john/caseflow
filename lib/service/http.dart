@@ -18,13 +18,7 @@ Future<String> generateFormattedAIResponse(String prompt) async {
         "parts": [
           {
             "text":
-                """I have a large block of text obtained from OCR. The text is unformatted, lacks proper punctuation, and might have errors. I need you to clean it up by:
-Correcting any spacing, punctuation, and grammatical errors.
-Structuring it into readable paragraphs.
-Adding headings and subheadings where relevant to improve readability.
-Extracting key points and summarizing the content in a concise yet detailed manner.
-Providing a brief summary (2-3 sentences) and a detailed summary (5-7 sentences).
-Here is the raw OCR text:$prompt""",
+                "correct all the spelling and gramatical errors and format it properly and give the text:$prompt" ,
           },
         ],
       },

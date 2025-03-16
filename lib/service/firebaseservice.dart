@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 class Firebaseservice {
   static Firebaseservice instance = Firebaseservice();
-  
+
   get firebaseFirestore => null;
 
   Future<void> uploadCaseDetails(
@@ -22,7 +22,6 @@ class Firebaseservice {
     String base64image,
     BuildContext context,
   ) async {
-    
     CollectionReference pdfCollection = FirebaseFirestore.instance.collection(
       'pdf',
     );
@@ -39,7 +38,7 @@ class Firebaseservice {
       'id': id, // Ensure the ID is stored as well
       'timestamp': FieldValue.serverTimestamp(),
     });
-  
+
     // Add full case text in the 'full_details' subcollection with the same `id`
     await caseRef.collection('full_details').doc(id).set({
       'text': fullText,
@@ -67,7 +66,8 @@ class Firebaseservice {
 
     return cases;
   }
-   Future<UserModel> getUserinformation() async {
+
+  Future<UserModel> getUserinformation() async {
     try {
       DocumentSnapshot<Map<String, dynamic>> QuerySnapshot =
           await firebaseFirestore

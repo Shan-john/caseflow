@@ -5,6 +5,8 @@ import 'package:caseflow/presentation/auth/splashScreen.dart';
 import 'package:caseflow/presentation/chatRoom.dart';
 import 'package:caseflow/presentation/searchScreen.dart';
 import 'package:caseflow/presentation/uploadScreen.dart';
+import 'package:caseflow/presentation/paymentgateway.dart';
+import 'package:caseflow/presentation/siteScreen.dart';
 import 'package:caseflow/service/firebase_auth_helper.dart';
 import 'package:caseflow/service/firebaseservice.dart';
 import 'package:caseflow/service/provider.dart';
@@ -35,9 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFB22222),
-       
+
       body: SingleChildScrollView(
-        
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: SizedBox(
@@ -51,17 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: 40),
-                    const Text(
-                      'CASEFLOW',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                        letterSpacing: 2,
-                      ),
-                    ),
-                    const SizedBox(height: 60),
+                    Image.asset('assets/image/logo.png', height: 250),
+                    // const SizedBox(height: 60),
                     const Text(
                       'Explore Legal\nJudgements Effortlessly',
                       textAlign: TextAlign.center,
@@ -99,11 +91,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             horizontal: 20,
                             vertical: 16,
                           ),
+                          decoration: BoxDecoration(),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Text(
-                                "'search by case, respondents, judge........",
+                                "'search by case, respondents, judges",
                                 style: TextStyle(
                                   color: Colors.grey[400],
                                   fontSize: 16,
@@ -112,83 +105,147 @@ class _HomeScreenState extends State<HomeScreen> {
                               Icon(Icons.search, color: Colors.grey[400]),
                             ],
                           ),
-                          decoration: BoxDecoration(),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 40),
-                    Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                _buildActionButton(
-                                  icon: Icons.upload_file,
-                                  label: 'Upload',
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => UploadScreen(),
-                                      ),
-                                    );
-                                  },
-                                ),
-                                const SizedBox(width: 20),
-                              ],
-                            
-                        
-                    ),
+                  const SizedBox(height: 40),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     _buildActionButton(
+                    //       icon: Icons.upload_file,
+                    //       label: 'Upload',
+                    //       onTap: () {
+                    //         Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //             builder: (context) => UploadScreen(),
+                    //           ),
+                    //         ); 
+                    //       },
+                    //     ),
+                    //     const SizedBox(width: 20),
+                    //   ], 
+                    // ),
 
                     const SizedBox(height: 40),
                     // Court building illustration would go here
-                    InkWell(
-                      
-                        onTap: () {
-                        
-                          Routes.instance.push(
-                            widget: ChatScreen(),
-                            context: context,
-                          ); 
-                        },
-                        child: const Align(
-                          alignment: Alignment.bottomRight,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 30,
-                            child: Icon(
-                              Icons.balance,
-                              color: Color(0xFFB22222),
-                              size: 30,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Routes.instance.push(
+                              widget: InAppWebViewScreen(),
+                              context: context,
+                            );
+                          },
+                          child: const Align(
+                            alignment: Alignment.bottomLeft,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 30,
+
+                              child: Icon(
+                                Icons.stream,
+                                color: Color(0xFFB22222),
+                                size: 30,
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                        //upload button // da pinne ithe uncomment cheyyanam
+                      //  InkWell(
+                      //     onTap: () {
+                      //       Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //           builder: (context) => UploadScreen(),
+                      //         ),
+                      //       );
+                      //     },
+                      //     child: const Align(
+                      //       alignment: Alignment.bottomLeft,
+                      //       child: CircleAvatar(
+                      //         backgroundColor:  Color(0xFFB22222),
+                      //         radius: 30,
+
+                      //         child: Icon(
+                      //           Icons.upload,
+                      //           color: Colors.white,
+                      //           size: 30,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+
+                        InkWell(
+                          onTap: () {
+                            Routes.instance.push(
+                              widget: ChatScreen(),
+                              context: context,
+                            );
+                          },
+                          child: const Align(
+                            alignment: Alignment.bottomRight,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 30,
+                              child: Icon(
+                                Icons.balance,
+                                color: Color(0xFFB22222),
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    //main site
                   ],
                 ),
-                
-                 Align(
+                  Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: IconButton(
+                      icon: const Icon(Icons.request_page_outlined, size: 30, color: Colors.white),
+                      onPressed: () {
+                         
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PaymentGatewayScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                Align(
                   alignment: Alignment.topRight,
-                   child: Padding(
-                     padding: const EdgeInsets.only(top :20.0),
-                     child: IconButton(
-                                 icon: const Icon(Icons.logout,color: Colors.white,),
-                                 onPressed: () {
-                                   FirebaseAuth_Helper.instance.logout();
-                                   Navigator.pushReplacement(
-                                     context,
-                                     MaterialPageRoute(
-                      builder: (context) => SplashScreen(),
-                                     ),
-                                   );
-                                 },
-                               ),
-                   ),
-                 ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: IconButton(
+                      icon: const Icon(Icons.logout,size: 30, color: Colors.white),
+                      onPressed: () {
+                        FirebaseAuth_Helper.instance.logout();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SplashScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
         ),
       ),
-      
     );
   }
 

@@ -485,17 +485,13 @@ class _SearchScreenState extends State<SearchScreen> {
             decoration: BoxDecoration(
               color: const Color(0xFFB22222),
               borderRadius: BorderRadius.circular(16),
+              image: const DecorationImage(
+                image: AssetImage('assets/image/casefile.png'),
+              ),
             ),
             margin: const EdgeInsets.all(12),
             child: const Center(
-              child: Text(
-                'PDF',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              
             ),
           ),
           // Case Details

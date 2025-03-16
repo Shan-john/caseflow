@@ -134,26 +134,38 @@ Image base64ToImage(String base64String) {
 //  base64ToImage(base64String),
 
 /// Function to show the image in a dialog
+
+/// Function to show the image in a zoomable dialog
+
+/// Function to show the image in a full-screen zoomable dialog
 void _showImageDialog(BuildContext context, String base64String) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return SingleChildScrollView(
-        child: Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-               
-              base64ToImage(base64String),
-              TextButton(
+      return Dialog(
+        insetPadding: EdgeInsets.zero, // Make dialog full screen
+        backgroundColor: Colors.black, // Full black background for better visibility
+        child: Stack(
+          children: [
+            InteractiveViewer(
+              panEnabled: true, // Enable panning
+              boundaryMargin: EdgeInsets.all(0),
+              minScale: 1.0,
+              maxScale: 5.0,
+              child: Center(child: base64ToImage(base64String)),
+            ),
+            Positioned(
+              top: 40, // Adjust position
+              right: 20,
+              child: IconButton(
+                icon: Icon(Icons.close, color: Colors.white, size: 30),
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text("Close"),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     },
   );
 }
+

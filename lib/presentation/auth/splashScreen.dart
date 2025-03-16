@@ -53,7 +53,17 @@ class _SplashScreenState extends State<SplashScreen> {
     return const Scaffold(
       backgroundColor: Color.fromARGB(255, 18, 18, 34),
       body: Center(
-        child: Image(image: AssetImage("assets/image/SupremeCourt-red.png")),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+              Image(image: AssetImage('assets/image/logo.png'), height: 250),
+           Opacity(
+  opacity: 0.5, // Set the opacity (0.0 is fully transparent, 1.0 is fully visible)
+  child: Image(image : AssetImage("assets/image/SupremeCourt-red.png")),
+)
+          ],
+        ),
       ),
     );
   }

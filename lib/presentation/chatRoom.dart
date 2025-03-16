@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:http/http.dart' as http;
 
 class ChatScreen extends StatefulWidget {
@@ -88,8 +89,12 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       body: Container(
-        color: Colors.white,
+       
+        decoration: const BoxDecoration(
+         image: DecorationImage(image:  AssetImage("assets/image/SupremeCourt-red.png",),opacity: 0.2,fit: BoxFit.cover),
+        ),
         child: Column(
           children: [
             // Custom App Bar with curved bottom
@@ -115,22 +120,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         icon: const Icon(Icons.arrow_back, color: Colors.white),
                         onPressed: () => Navigator.pop(context),
                       ),
-                      const Expanded(
-                        child: Text(
-                          'CASEFLOWAI',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 1.5,
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.search, color: Colors.white),
-                        onPressed: () {},
-                      ),
+                      Gap(50),
+                       Image.asset('assets/image/logo_Ai.png', height: 40),
+                    
                     ],
                   ),
                   const SizedBox(height: 8),
